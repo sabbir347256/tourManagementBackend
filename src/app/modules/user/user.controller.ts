@@ -1,0 +1,59 @@
+import { NextFunction, Request, Response } from "express";
+import httpStatus from "http-status-codes";
+import { User } from "./user.model";
+import { userService } from "./user.service";
+import appError from "../../errorHelpers/appError";
+import { catchAsyn } from "../../utilis/catchAsyn";
+import { sendResponse } from "../../utilis/sendResponse";
+
+// type AsynHandler = (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction,
+// ) => Promise<void>;
+
+// const catchAsyn =
+//   (fn: AsynHandler) => (req: Request, res: Response, next: NextFunction) => {
+//     Promise.resolve(fn(req, res, next)).catch((err: any) => {
+//       console.log(err);
+//       next(err);
+//     });
+//   };
+
+const createUser = catchAsyn(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await userService.createUser(req.body);
+
+    res.status(httpStatus.CREATED).json({
+      message: "User Created Successfully",
+      success: "true",
+      user,
+    });
+
+    sendResponse(res, {
+      statusCode: httpStatus.CREATED,
+      message: "User Created Successfully",
+      success: true,
+      data: user,
+    });
+  },
+);
+
+const getAllUsers = catchAsyn(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const users = await userService.getAllUsers();
+
+    sendResponse(res, {
+      statusCode: httpStatus.CREATED,
+      message: "User Created Successfully",
+      success: true,
+      data: users.data,
+      meta : users.meta
+    });
+  },
+);
+
+export const userController = {
+  createUser,
+  getAllUsers,
+};
