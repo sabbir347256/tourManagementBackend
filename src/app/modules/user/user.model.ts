@@ -3,10 +3,7 @@ import { IsActive, IsAuthProvider, IUser, Role } from "./user.interface";
 import { boolean } from "zod";
 
 const authProviderSchema = new Schema<IsAuthProvider>({
-    provider : {
-        type : String,
-        required : true
-    },
+    provider : {type : String,required : true },
     providerID :{type : String , required : true}
 },{
     versionKey : false,

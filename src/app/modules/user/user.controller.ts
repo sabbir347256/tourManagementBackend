@@ -24,12 +24,6 @@ const createUser = catchAsyn(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await userService.createUser(req.body);
 
-    res.status(httpStatus.CREATED).json({
-      message: "User Created Successfully",
-      success: "true",
-      user,
-    });
-
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       message: "User Created Successfully",

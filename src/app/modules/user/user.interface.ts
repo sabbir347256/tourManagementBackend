@@ -8,7 +8,7 @@ export enum Role {
 }
 
 export type IsAuthProvider ={
-    provider : string;
+    provider : 'google' | 'credentials'
     providerID : string
 }
 
