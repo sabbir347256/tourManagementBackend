@@ -5,6 +5,9 @@ import { userService } from "./user.service";
 import appError from "../../errorHelpers/appError";
 import { catchAsyn } from "../../utilis/catchAsyn";
 import { sendResponse } from "../../utilis/sendResponse";
+import { verifyToken } from "../../utilis/jwt";
+import { envVars } from "../../config/env";
+import { JwtPayload } from "jsonwebtoken";
 
 // type AsynHandler = (
 //   req: Request,
@@ -33,6 +36,23 @@ const createUser = catchAsyn(
   },
 );
 
+const updateUser = catchAsyn(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userID = req.params.id;
+    const token = req.headers.authorization;
+    const payload = req.body;
+    const verifiedToken = verifyToken(token as string,envVars.JWT_ACCESS_SECRET) as JwtPayload;
+    const user = await userService.updateUser(userID as string,payload,verifiedToken);
+
+    sendResponse(res, {
+      statusCode: httpStatus.CREATED,
+      message: "User Update Successfully",
+      success: true,
+      data: user,
+    });
+  },
+);
+
 const getAllUsers = catchAsyn(
   async (req: Request, res: Response, next: NextFunction) => {
     const users = await userService.getAllUsers();
@@ -50,4 +70,5 @@ const getAllUsers = catchAsyn(
 export const userController = {
   createUser,
   getAllUsers,
+  updateUser
 };

@@ -1,15 +1,15 @@
 import { Server } from "http";
 import mongoose from "mongoose";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import { envVars } from "./app/config/env";
 import app from "./app";
+import { seedSuperAdmin } from "./app/utilis/seedSuperAdmin";
 
-const port = process.env.PORT ;
-const db_url = envVars.DB_URL; 
+const port = process.env.PORT;
+const db_url = envVars.DB_URL;
 dotenv.config();
 
 let server: Server;
-
 
 const startServer = async () => {
   try {
@@ -23,5 +23,7 @@ const startServer = async () => {
   }
 };
 
-startServer();
-
+(async () => {
+  await startServer();
+  await seedSuperAdmin();
+})();

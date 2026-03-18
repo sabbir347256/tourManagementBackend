@@ -5,7 +5,7 @@ import appError from "../errorHelpers/appError";
 
 export const globalErrorHandler = (err:any,req : Request, res : Response, next: NextFunction) => {
     let statusCode = 500;
-    const message  = `Something went Wrong ${err.message}`
+    const message  = ` ${err.message}`
 
     if(err instanceof appError){
         statusCode = err.statusCode
